@@ -46,8 +46,8 @@ func main() {
 	usr, err := simpleReadLine()
 	perror("Could not read properly :", err)
 
-	debugln("Fetching user data")
 	fmt.Println("Please wait while data are being retrieved...")
+	debugln("Fetching user data")
 	usra, err = fetchUserData(usr)
 	perror("Could not fetch user data :", err)
 
