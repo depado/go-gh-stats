@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 type analysis struct {
 	nrepo int
 
@@ -24,7 +26,22 @@ type analysis struct {
 	forkedRepos      int
 }
 
-func analyseRepos(usr string) (an analysis, err error) {
+func (an *analysis) display() {
+	fmt.Println("Number of repositories :", an.nrepo)
+	fmt.Println("Most starred repository :", an.mostStarred, "with", an.highestStars, "stars.")
+	fmt.Println("Most forked repository :", an.mostForked, "with", an.highestForks, "forks.")
+	fmt.Println("Most watched repository :", an.mostWatched, "with", an.highestWatches, "watchers.")
+	fmt.Println()
+	fmt.Println("Average stars per repository :", an.avStarsPerRepo)
+	fmt.Println("Average forks per repository :", an.avForksPerRepo)
+	fmt.Println("Average watchers per repository :", an.avWatchesPerRepo)
+	fmt.Println()
+	fmt.Println("Total stars :", an.totalStars)
+	fmt.Println("Total forks :", an.totalForks)
+	fmt.Println("Total watchers :", an.totalWatches)
+}
+
+func (an *analysis) analyseRepos(usr string) (err error) {
 	var rd allRepos
 	rd, err = fetchReposData(usr)
 	if err != nil {

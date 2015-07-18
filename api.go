@@ -1,6 +1,9 @@
 package main
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
 type userAPI struct {
 	Login             string      `json:"login"`
@@ -33,6 +36,10 @@ type userAPI struct {
 	Following         int         `json:"following"`
 	CreatedAt         time.Time   `json:"created_at"`
 	UpdatedAt         time.Time   `json:"updated_at"`
+}
+
+func (usr *userAPI) display() {
+	fmt.Println(usr.Login+"'s account exists since", usr.CreatedAt.String())
 }
 
 type repoAPI struct {
