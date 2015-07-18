@@ -45,6 +45,7 @@ func (an *analysis) analyseRepos(usr string) (err error) {
 	var rd allRepos
 	rd, err = fetchReposData(usr)
 	if err != nil {
+		debugln("In analyseRepos err returned from fetchReposData")
 		return
 	}
 	an.nrepo = len(rd)

@@ -52,7 +52,7 @@ func main() {
 	perror("Could not fetch user data :", err)
 
 	debugln("Fetching and analysing repos.")
-	an.analyseRepos(usr)
+	err = an.analyseRepos(usr)
 	perror("Error when analysing :", err)
 
 	debugln("Displaying analysis")
