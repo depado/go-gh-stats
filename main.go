@@ -34,9 +34,33 @@ func main() {
 	if err != nil {
 		log.Fatalln("Could not read properly :", err)
 	}
+	if debug {
+		log.Println("Fetching user data")
+	}
+	fmt.Println("Please wait while data are being retrieved...")
 	usra, err := fetchUserData(usr)
 	if err != nil {
 		log.Fatalln("Could not fetch user data : ", err)
 	}
-	fmt.Println(usr+"'s account exists since", string(usra.CreatedAt.String()))
+	if debug {
+		log.Println("Fetching and analysing repos.")
+	}
+	an, err := analyseRepos(usr)
+	if err != nil {
+		log.Fatalln("Error when analysing :", err)
+	}
+	fmt.Println(usr+"'s account exists since", usra.CreatedAt.String())
+	fmt.Println()
+	fmt.Println("Number of repositories :", an.nrepo)
+	fmt.Println("Most starred repository :", an.mostStarred, "with", an.highestStars, "stars.")
+	fmt.Println("Most forked repository :", an.mostForked, "with", an.highestForks, "forks.")
+	fmt.Println("Most watched repository :", an.mostWatched, "with", an.highestWatches, "watchers.")
+	fmt.Println()
+	fmt.Println("Average stars per repository :", an.avStarsPerRepo)
+	fmt.Println("Average forks per repository :", an.avForksPerRepo)
+	fmt.Println("Average watchers per repository :", an.avWatchesPerRepo)
+	fmt.Println()
+	fmt.Println("Total stars :", an.totalStars)
+	fmt.Println("Total forks :", an.totalForks)
+	fmt.Println("Total watchers :", an.totalWatches)
 }
