@@ -10,6 +10,8 @@ import (
 
 var debug bool
 
+// A simple readline operation. Reads stdin until Enter is pressed and returns
+// the catched string.
 func simpleReadLine() (l string, err error) {
 	rl := bufio.NewScanner(os.Stdin)
 	rl.Scan()
@@ -20,12 +22,15 @@ func simpleReadLine() (l string, err error) {
 	return
 }
 
+// Prints a string using log.Println if and only if the debug flag was passed.
+// t : The string to be printed.
 func debugln(t string) {
 	if debug {
 		log.Println(t)
 	}
 }
 
+// Logs err if err isn't nil. Also exits the program.
 func perror(t string, err error) {
 	if err != nil {
 		log.Fatalln(t, err)
@@ -34,7 +39,8 @@ func perror(t string, err error) {
 
 func main() {
 	var err error
-	var usra userAPI
+
+	var ua userAPI
 	var an analysis
 
 	flag.BoolVar(&debug, "debug", false, "Activates the debug logs")
@@ -48,15 +54,15 @@ func main() {
 
 	fmt.Println("Please wait while data are being retrieved...")
 	debugln("Fetching user data")
-	usra, err = fetchUserData(usr)
+	err = ua.fetch(usr)
 	perror("Could not fetch user data :", err)
 
-	debugln("Fetching and analysing repos.")
+	debugln("Fetching and analysing repos")
 	err = an.analyseRepos(usr)
 	perror("Error when analysing :", err)
 
 	debugln("Displaying analysis")
-	usra.display()
-	fmt.Println()
+	ua.display()
+	fmt.Println() // Extra line break
 	an.display()
 }

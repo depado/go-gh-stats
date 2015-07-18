@@ -21,7 +21,7 @@ type analysis struct {
 	totalForks   int
 	totalWatches int
 
-	totalCommits     int
+	totalCommits     int // TODO
 	avCommitsPerRepo int
 	forkedRepos      int
 }
@@ -43,9 +43,8 @@ func (an *analysis) display() {
 
 func (an *analysis) analyseRepos(usr string) (err error) {
 	var rd allRepos
-	rd, err = fetchReposData(usr)
+	err = fetchURL("https://api.github.com/users/"+usr+"/repos", &rd)
 	if err != nil {
-		debugln("In analyseRepos err returned from fetchReposData")
 		return
 	}
 	an.nrepo = len(rd)

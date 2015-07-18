@@ -38,8 +38,13 @@ type userAPI struct {
 	UpdatedAt         *time.Time  `json:"updated_at"`
 }
 
-func (usr *userAPI) display() {
-	fmt.Println(usr.Login+"'s account exists since", usr.CreatedAt.String())
+func (ua *userAPI) display() {
+	fmt.Println(ua.Login+"'s account exists since", ua.CreatedAt.String())
+}
+
+func (ua *userAPI) fetch(usr string) (err error) {
+	err = fetchURL("https://api.github.com/users/"+usr, &ua)
+	return
 }
 
 type repoAPI struct {
