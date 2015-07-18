@@ -15,6 +15,9 @@ func fetchURL(url string, out interface{}) (err error) {
 	// Add the API version in Headers
 	req.Header.Add("Accept", "application/vnd.github.v3+json")
 	resp, err := c.Do(req)
+	if err != nil {
+		return
+	}
 	defer resp.Body.Close()
 	dec := json.NewDecoder(resp.Body)
 	err = dec.Decode(out)
