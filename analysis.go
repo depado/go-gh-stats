@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type analysis struct {
 	nrepo int
@@ -8,26 +11,29 @@ type analysis struct {
 	mostStarred string
 	mostForked  string
 	mostWatched string
+	mostCommits string
 
 	highestStars   int
 	highestForks   int
 	highestWatches int
+	highestCommits int
 
 	avStarsPerRepo   float64
 	avForksPerRepo   float64
 	avWatchesPerRepo float64
+	avCommitsPerRepo float64
 
 	totalStars   int
 	totalForks   int
 	totalWatches int
+	totalCommits int
 
-	totalCommits     int // TODO
-	avCommitsPerRepo int
-	forkedRepos      int
+	forkedRepos int
 }
 
 func (an *analysis) display() {
 	fmt.Println("Number of repositories :", an.nrepo)
+	fmt.Println("Forked repositories :", an.forkedRepos)
 	fmt.Println("Most starred repository :", an.mostStarred, "with", an.highestStars, "stars.")
 	fmt.Println("Most forked repository :", an.mostForked, "with", an.highestForks, "forks.")
 	fmt.Println("Most watched repository :", an.mostWatched, "with", an.highestWatches, "watchers.")
@@ -48,6 +54,8 @@ func (an *analysis) analyseRepos(usr string) (err error) {
 		return
 	}
 	an.nrepo = len(rd)
+	cs := make(allCommits, an.nrepo)
+	cr := 0
 	for _, r := range rd {
 		if r.Fork {
 			an.forkedRepos++
@@ -67,8 +75,11 @@ func (an *analysis) analyseRepos(usr string) (err error) {
 				an.highestForks = r.ForksCount
 				an.mostForked = r.Name
 			}
+			go fetchURL(strings.Replace(r.CommitsURL, "{/sha}", "", 1), &cs[cr])
+			cr++
 		}
 	}
+
 	an.avStarsPerRepo = float64(an.totalStars) / float64(an.nrepo)
 	an.avForksPerRepo = float64(an.totalForks) / float64(an.nrepo)
 	an.avWatchesPerRepo = float64(an.totalWatches) / float64(an.nrepo)
